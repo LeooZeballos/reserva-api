@@ -29,17 +29,17 @@ VALUES (5, 4);
 
 -- Estados
 INSERT INTO ESTADO (NOMBRE, DESCRIPCION, COLOR)
-VALUES ('Creado', 'La reserva fue creada de manera exitosa.', 'FFA500');
+VALUES ('Creado', 'La reserva fue creada de manera exitosa.', '#FFA500');
 INSERT INTO ESTADO (NOMBRE, DESCRIPCION, COLOR)
-VALUES ('Reservado', 'La reserva quedo grabada correctamente.', '008000');
+VALUES ('Reservado', 'La reserva quedo grabada correctamente.', '#008000');
 INSERT INTO ESTADO (NOMBRE, DESCRIPCION, COLOR)
-VALUES ('Pendiente', 'La reserva está pendiente.', 'FFD700');
+VALUES ('Pendiente', 'La reserva está pendiente.', '#FFD700');
 INSERT INTO ESTADO (NOMBRE, DESCRIPCION, COLOR)
-VALUES ('Cancelada', 'La reserva fue cancelada.', 'FF0000');
+VALUES ('Cancelada', 'La reserva fue cancelada.', '#FF0000');
 INSERT INTO ESTADO (NOMBRE, DESCRIPCION, COLOR)
-VALUES ('Completada', 'La reserva fue completada.', '00FF00');
+VALUES ('Completada', 'La reserva fue completada.', '#00FF00');
 INSERT INTO ESTADO (NOMBRE, DESCRIPCION, COLOR)
-VALUES ('Bloqueada', 'La reserva fue bloqueada.', '800000');
+VALUES ('Bloqueada', 'La reserva fue bloqueada.', '#800000');
 
 -- Rol
 INSERT INTO ROL (NOMBRE, DESCRIPCION)
