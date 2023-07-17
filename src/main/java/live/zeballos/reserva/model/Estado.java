@@ -18,7 +18,7 @@ public class Estado extends ObjetoDB {
     @Column(name = "descripcion", nullable = true)
     private String descripcion;
 
-    @Column(name = "color", nullable = false, length = 6)
+    @Column(name = "color", nullable = false, length = 7)
     private String color;
 
 }
