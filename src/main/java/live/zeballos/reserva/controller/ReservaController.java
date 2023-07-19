@@ -43,6 +43,8 @@ public class ReservaController {
     public ResponseEntity<Reserva> create(@RequestBody Reserva reserva) {
         try {
             return ResponseEntity.ok(reservaService.create(reserva));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         } catch (ReservaAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         } catch (Exception e) {
@@ -52,7 +54,15 @@ public class ReservaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Reserva> update(@PathVariable Long id, @RequestBody Reserva reserva) {
-        return ResponseEntity.ok(reservaService.update(id, reserva));
+        try {
+            return ResponseEntity.ok(reservaService.update(id, reserva));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (ReservaAlreadyExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/{id}")

@@ -1,7 +1,6 @@
 package live.zeballos.reserva.service;
 
 import live.zeballos.reserva.error.ReservaAlreadyExistsException;
-import live.zeballos.reserva.model.EspacioFisico;
 import live.zeballos.reserva.model.Reserva;
 import live.zeballos.reserva.query.ReservaQueryParams;
 import live.zeballos.reserva.repository.ReservaRepository;
@@ -55,7 +54,23 @@ public class ReservaService implements IReservaService {
 
     @Override
     public Reserva create(Reserva reserva) {
-        checkOverlappingReserva(reserva);
+        // Validar que no exista una reserva para el mismo espacio físico en el mismo horario
+        if (repository.existsByEspacioFisicoAndFechaHoraInicioLessThanAndFechaHoraFinGreaterThan(reserva.getEspacioFisico(), reserva.getFechaHoraFin(), reserva.getFechaHoraInicio())) {
+            throw new ReservaAlreadyExistsException("Ya existe una reserva para el espacio físico " +
+                    reserva.getEspacioFisico().getNombre() + " en el horario " + reserva.getFechaHoraInicio() + " - " + reserva.getFechaHoraFin());
+        }
+
+        // Validar que la fecha de inicio sea menor a la fecha de fin
+        if (reserva.getFechaHoraInicio().isAfter(reserva.getFechaHoraFin())) {
+            throw new IllegalArgumentException("La fecha de inicio debe ser menor a la fecha de fin");
+        }
+
+        // Validar que la fecha de inicio sea mayor a la fecha actual
+        if (reserva.getFechaHoraInicio().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("La fecha de inicio debe ser mayor a la fecha actual");
+        }
+
+        // Finalmente, crear la reserva
         reserva.setFechaHoraCreacion(LocalDateTime.now());
         reserva.setEstado(estadoService.get("Creado"));
         return repository.saveAndFlush(reserva);
@@ -63,7 +78,28 @@ public class ReservaService implements IReservaService {
 
     @Override
     public Reserva update(Long id, Reserva reserva) {
-        checkOverlappingReserva(reserva);
+        // Validar que no exista una reserva para el mismo espacio físico en el mismo horario
+        if (repository.existsByEspacioFisicoAndFechaHoraInicioLessThanAndFechaHoraFinGreaterThanAndIdNot(
+                reserva.getEspacioFisico(),
+                reserva.getFechaHoraFin(),
+                reserva.getFechaHoraInicio(),
+                id
+        )) {
+            throw new ReservaAlreadyExistsException("Ya existe una reserva para el espacio físico " +
+                    reserva.getEspacioFisico().getNombre() + " en el horario " + reserva.getFechaHoraInicio() + " - " + reserva.getFechaHoraFin());
+        }
+
+        // Validar que la fecha de inicio sea menor a la fecha de fin
+        if (reserva.getFechaHoraInicio().isAfter(reserva.getFechaHoraFin())) {
+            throw new IllegalArgumentException("La fecha de inicio debe ser menor a la fecha de fin");
+        }
+
+        // Validar que la fecha de inicio sea mayor a la fecha actual
+        if (reserva.getFechaHoraInicio().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("La fecha de inicio debe ser mayor a la fecha actual");
+        }
+
+        // Finalmente, actualizar la reserva
         reserva.setId(id);
         return repository.saveAndFlush(reserva);
     }
@@ -71,23 +107,6 @@ public class ReservaService implements IReservaService {
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
-    }
-
-    private void checkOverlappingReserva(Reserva reserva) {
-        EspacioFisico espacioFisico = reserva.getEspacioFisico();
-        LocalDateTime fechaHoraFin = reserva.getFechaHoraFin();
-        LocalDateTime fechaHoraInicio = reserva.getFechaHoraInicio();
-        Long id = reserva.getId();
-
-        if (existsOverlappingReserva(espacioFisico, fechaHoraFin, fechaHoraInicio, id)) {
-            throw new ReservaAlreadyExistsException("Ya existe una reserva para el espacio físico " +
-                    espacioFisico.getNombre() + " en el horario " + fechaHoraInicio + " - " + fechaHoraFin);
-        }
-    }
-
-    private boolean existsOverlappingReserva(EspacioFisico espacioFisico, LocalDateTime fechaHoraFin, LocalDateTime fechaHoraInicio, Long id) {
-        return repository.existsByEspacioFisicoAndFechaHoraFinGreaterThanEqualAndFechaHoraInicioLessThanEqualAndIdNot(
-                espacioFisico, fechaHoraFin, fechaHoraInicio, id);
     }
 
 }

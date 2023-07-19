@@ -44,5 +44,33 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long>, JpaSpec
         }, pageable);
     }
 
-    boolean existsByEspacioFisicoAndFechaHoraFinGreaterThanEqualAndFechaHoraInicioLessThanEqualAndIdNot(EspacioFisico espacioFisico, LocalDateTime fechaHoraInicio, LocalDateTime fechaHoraFin, Long id);
+    /**
+     * ¿Existe una reserva que se superponga con la que se quiere crear?
+     * Se superpone si:
+     * - El espacio físico es el mismo
+     * - La fecha de inicio de la reserva es menor a la fecha de fin de la reserva existente
+     * - La fecha de fin de la reserva es mayor a la fecha de inicio de la reserva existente
+     *
+     * @param espacioFisico   espacio físico de la reserva
+     * @param fechaHoraInicio fecha y hora de inicio de la reserva
+     * @param fechaHoraFin    fecha y hora de fin de la reserva
+     * @return true si existe una reserva que se superpone con la que se quiere crear, false en caso contrario
+     */
+    boolean existsByEspacioFisicoAndFechaHoraInicioLessThanAndFechaHoraFinGreaterThan(EspacioFisico espacioFisico, LocalDateTime fechaHoraInicio, LocalDateTime fechaHoraFin);
+
+    /**
+     * ¿Existe una reserva que se superponga con la que se quiere crear?
+     * Se superpone si:
+     * - El espacio físico es el mismo
+     * - La fecha de inicio de la reserva es menor a la fecha de fin de la reserva existente
+     * - La fecha de fin de la reserva es mayor a la fecha de inicio de la reserva existente
+     * - El id de la reserva no es el mismo (para el caso de actualizar una reserva)
+     *
+     * @param espacioFisico   espacio físico de la reserva
+     * @param fechaHoraInicio fecha y hora de inicio de la reserva
+     * @param fechaHoraFin    fecha y hora de fin de la reserva
+     * @param id              id de la reserva
+     * @return true si existe una reserva que se superpone con la que se quiere crear, false en caso contrario
+     */
+    boolean existsByEspacioFisicoAndFechaHoraInicioLessThanAndFechaHoraFinGreaterThanAndIdNot(EspacioFisico espacioFisico, LocalDateTime fechaHoraInicio, LocalDateTime fechaHoraFin, Long id);
 }
