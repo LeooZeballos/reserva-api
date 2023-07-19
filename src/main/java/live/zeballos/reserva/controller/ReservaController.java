@@ -3,6 +3,7 @@ package live.zeballos.reserva.controller;
 import live.zeballos.reserva.error.ReservaAlreadyExistsException;
 import live.zeballos.reserva.model.Reserva;
 import live.zeballos.reserva.service.IReservaService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/reserva")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Slf4j
 public class ReservaController {
 
     private final IReservaService reservaService;
@@ -40,28 +42,34 @@ public class ReservaController {
     }
 
     @PostMapping
-    public ResponseEntity<Reserva> create(@RequestBody Reserva reserva) {
+    public ResponseEntity<?> create(@RequestBody Reserva reserva) {
         try {
             return ResponseEntity.ok(reservaService.create(reserva));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getMessage()));
         } catch (ReservaAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorMessage(e.getMessage()));
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reserva> update(@PathVariable Long id, @RequestBody Reserva reserva) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Reserva reserva) {
         try {
             return ResponseEntity.ok(reservaService.update(id, reserva));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            log.error(e.getMessage());
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getMessage()));
         } catch (ReservaAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorMessage(e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorMessage(e.getMessage()));
         }
     }
 
@@ -71,4 +79,7 @@ public class ReservaController {
         return ResponseEntity.ok("Reserva con id " + id + " eliminada correctamente.");
     }
 
+}
+
+record ErrorMessage(String message) {
 }
