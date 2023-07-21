@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static live.zeballos.reserva.util.Parser.parseIdList;
@@ -56,8 +57,8 @@ public class ReservaService implements IReservaService {
     public Reserva create(Reserva reserva) {
         // Validar que no exista una reserva para el mismo espacio físico en el mismo horario
         if (repository.existsByEspacioFisicoAndFechaHoraInicioLessThanAndFechaHoraFinGreaterThan(reserva.getEspacioFisico(), reserva.getFechaHoraFin(), reserva.getFechaHoraInicio())) {
-            throw new ReservaAlreadyExistsException("Ya existe una reserva para el espacio físico " +
-                    reserva.getEspacioFisico().getNombre() + " en el horario " + reserva.getFechaHoraInicio() + " - " + reserva.getFechaHoraFin());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            throw new ReservaAlreadyExistsException("Ya existe una reserva para ese espacio físico en el horario " + reserva.getFechaHoraInicio().format(formatter) + " - " + reserva.getFechaHoraFin().format(formatter));
         }
 
         // Validar que la fecha de inicio sea menor a la fecha de fin
@@ -85,8 +86,8 @@ public class ReservaService implements IReservaService {
                 reserva.getFechaHoraInicio(),
                 id
         )) {
-            throw new ReservaAlreadyExistsException("Ya existe una reserva para el espacio físico " +
-                    reserva.getEspacioFisico().getNombre() + " en el horario " + reserva.getFechaHoraInicio() + " - " + reserva.getFechaHoraFin());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            throw new ReservaAlreadyExistsException("Ya existe una reserva para ese espacio físico en el horario " + reserva.getFechaHoraInicio().format(formatter) + " - " + reserva.getFechaHoraFin().format(formatter));
         }
 
         // Validar que la fecha de inicio sea menor a la fecha de fin
