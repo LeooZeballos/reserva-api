@@ -94,11 +94,6 @@ public class ReservaService implements IReservaService {
             throw new IllegalArgumentException("La fecha de inicio debe ser menor a la fecha de fin");
         }
 
-        // Validar que la fecha de inicio sea mayor a la fecha actual
-        if (reserva.getFechaHoraInicio().isBefore(LocalDateTime.now())) {
-            throw new IllegalArgumentException("La fecha de inicio debe ser mayor a la fecha actual");
-        }
-
         // Finalmente, actualizar la reserva
         reserva.setId(id);
         return repository.saveAndFlush(reserva);
