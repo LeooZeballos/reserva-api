@@ -1,23 +1,20 @@
-# Use a base image with JDK 17 and Maven
+# Use a specific version of Maven and JDK 17
 FROM maven:3.8.3-openjdk-17-slim AS build
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the Maven project file
-COPY pom.xml .
+# Copy the Maven project files and source code
+COPY . .
 
 # Download the project dependencies
 RUN mvn dependency:go-offline -B
 
-# Copy the source code
-COPY src ./src
-
 # Build the application
 RUN mvn package -DskipTests
 
-# Create a new stage using the base JDK 17 image
-FROM openjdk:17-jdk
+# Create a new stage using a slimmer JRE base image
+FROM openjdk:17-slim
 
 # Set the working directory in the container
 WORKDIR /app
