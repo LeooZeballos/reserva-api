@@ -46,7 +46,7 @@ public class EstadoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         estadoService.delete(id);
-        return ResponseEntity.ok("Se eliminó el estado con id: " + id + " correctamente.");
+        return ResponseEntity.noContent().build();
     }
 
 }

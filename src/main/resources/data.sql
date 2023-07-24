@@ -30,7 +30,14 @@ VALUES ('Creado', 'La reserva fue creada de manera exitosa.', '#FFA500'),
        ('Pendiente', 'La reserva está pendiente.', '#FFD700'),
        ('Cancelada', 'La reserva fue cancelada.', '#FF0000'),
        ('Completada', 'La reserva fue completada.', '#00FF00'),
-       ('Bloqueada', 'La reserva fue bloqueada.', '#800000');
+       ('Bloqueada', 'La reserva fue bloqueada.', '#800000'),
+       ('Rechazada', 'La reserva fue rechazada.', '#FF0000'),
+       ('Finalizada', 'La reserva fue finalizada.', '#00FF00'),
+       ('En Curso', 'La reserva está en curso.', '#008000'),
+       ('Reprogramada', 'La reserva fue reprogramada.', '#FFD700'),
+       ('Adelantada', 'La reserva fue adelantada.', '#FFD700'),
+       ('Atrasada', 'La reserva fue atrasada.', '#FFD700'),
+       ('Cerrada', 'La reserva fue cerrada.', '#00FF00');
 
 -- Rol
 INSERT INTO ROL (NOMBRE, DESCRIPCION)
