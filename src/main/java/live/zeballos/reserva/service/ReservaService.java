@@ -23,15 +23,12 @@ public class ReservaService implements IReservaService {
     private final EstadoService estadoService;
 
     @Override
-    public Page<Reserva> getAll(Pageable pageable, Integer duracion, String comentario, String clienteId, String motivoReserva, String estadoId, String motivoRechazo, String espacioFisicoId) {
+    public Page<Reserva> getAll(Pageable pageable, String clienteId, String motivoReserva, String estadoId, String espacioFisicoId) {
         return repository.findByParams(
                 ReservaQueryParams.builder()
-                        .duracion(duracion)
-                        .comentario(comentario)
                         .clienteId(parseIdList(clienteId))
                         .motivoReserva(motivoReserva)
                         .estadoId(parseIdList(estadoId))
-                        .motivoRechazo(motivoRechazo)
                         .espacioFisicoId(parseIdList(espacioFisicoId))
                         .build(),
                 pageable

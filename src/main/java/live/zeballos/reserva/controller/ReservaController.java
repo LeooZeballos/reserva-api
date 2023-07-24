@@ -25,15 +25,12 @@ public class ReservaController {
     @GetMapping
     public Page<Reserva> getAll(
             Pageable pageable,
-            @RequestParam(required = false) Integer duracion,
-            @RequestParam(required = false) String comentario,
             @RequestParam(required = false) String clienteId,
             @RequestParam(required = false) String motivoReserva,
             @RequestParam(required = false) String estadoId,
-            @RequestParam(required = false) String motivoRechazo,
             @RequestParam(required = false) String espacioFisicoId
     ) {
-        return reservaService.getAll(pageable, duracion, comentario, clienteId, motivoReserva, estadoId, motivoRechazo, espacioFisicoId);
+        return reservaService.getAll(pageable, clienteId, motivoReserva, estadoId, espacioFisicoId);
     }
 
     @GetMapping("/{id}")

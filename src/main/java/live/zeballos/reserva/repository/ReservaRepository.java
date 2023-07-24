@@ -19,12 +19,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long>, JpaSpec
     default Page<Reserva> findByParams(ReservaQueryParams queryParams, Pageable pageable) {
         return findAll((root, query, builder) -> {
             List<Predicate> reservaPredicates = new ArrayList<>();
-            if (queryParams.duracion() != null) {
-                reservaPredicates.add(builder.equal(root.get("duracion"), queryParams.duracion()));
-            }
-            if (queryParams.comentario() != null) {
-                reservaPredicates.add(builder.like(builder.lower(root.get("comentario")), "%" + queryParams.comentario().toLowerCase() + "%"));
-            }
             if (queryParams.clienteId() != null && !queryParams.clienteId().isEmpty()) {
                 reservaPredicates.add(root.join("cliente").get("id").in(queryParams.clienteId()));
             }
@@ -33,9 +27,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long>, JpaSpec
             }
             if (queryParams.estadoId() != null && !queryParams.estadoId().isEmpty()) {
                 reservaPredicates.add(root.join("estado").get("id").in(queryParams.estadoId()));
-            }
-            if (queryParams.motivoRechazo() != null) {
-                reservaPredicates.add(builder.like(builder.lower(root.get("motivoRechazo")), "%" + queryParams.motivoRechazo().toLowerCase() + "%"));
             }
             if (queryParams.espacioFisicoId() != null && !queryParams.espacioFisicoId().isEmpty()) {
                 reservaPredicates.add(root.join("espacioFisico").get("id").in(queryParams.espacioFisicoId()));
